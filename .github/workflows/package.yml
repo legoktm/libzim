@@ -58,6 +58,7 @@ jobs:
         if: startswith(matrix.distro, 'ubuntu:')
         name: Build package for ${{ matrix.distro }}
         with:
+          distro: ${{ matrix.distro }}
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
 
