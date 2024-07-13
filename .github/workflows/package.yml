@@ -41,7 +41,7 @@ jobs:
         env:
           REF: ${{ github.ref }}
 
-      - uses: legoktm/gh-action-auto-dch@25c8bd09c86c5cce962ad431d076ab1508b3e73f # 2024.07.13
+      - uses: legoktm/gh-action-auto-dch@2b7d6a33db93a408d4b5e2edf38be7fd578b11d7 # main
         with:
           fullname: Kiwix builder
           email: release+launchpad@kiwix.org
