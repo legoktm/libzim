@@ -13,13 +13,13 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-          - debian-unstable
-          - debian-trixie
-          - debian-bookworm
-          - debian-bullseye
-          - ubuntu-noble
-          - ubuntu-jammy
-          - ubuntu-focal
+          - debian:unstable
+          - debian:trixie
+          - debian:bookworm
+          - debian:bullseye
+          - ubuntu:noble
+          - ubuntu:jammy
+          - ubuntu:focal
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@a4aa98b93cab29d9b1101a6143fb8bce00e2eac4 # v2.7.1
@@ -41,60 +41,22 @@ jobs:
         env:
           REF: ${{ github.ref }}
 
-      - uses: legoktm/gh-action-auto-dch@644799a7111bc7f15878839859d74f939790534e # 2024.07.12
+      - uses: legoktm/gh-action-auto-dch@25c8bd09c86c5cce962ad431d076ab1508b3e73f # 2024.07.13
         with:
           fullname: Kiwix builder
           email: release+launchpad@kiwix.org
           distro: ${{ matrix.distro }}
 
-      - uses: legoktm/gh-action-build-deb@debian-unstable
-        if: matrix.distro == 'debian-unstable'
-        name: Build package for debian-unstable
-        id: build-debian-unstable
+      - uses: legoktm/gh-action-build-deb@test
+        if: startswith(matrix.distro, 'debian:')
+        name: Build package for ${{ matrix.distro }}
         with:
+          distro: ${{ matrix.distro }}
           args: --no-sign
 
-      - uses: legoktm/gh-action-build-deb@debian-trixie
-        if: matrix.distro == 'debian-trixie'
-        name: Build package for debian-trixie
-        id: build-debian-trixie
-        with:
-          args: --no-sign
-
-      - uses: legoktm/gh-action-build-deb@debian-bookworm
-        if: matrix.distro == 'debian-bookworm'
-        name: Build package for debian-bookworm
-        id: build-debian-bookworm
-        with:
-          args: --no-sign
-
-      - uses: legoktm/gh-action-build-deb@debian-bullseye
-        if: matrix.distro == 'debian-bullseye'
-        name: Build package for debian-bullseye
-        id: build-debian-bullseye
-        with:
-          args: --no-sign
-
-      - uses: legoktm/gh-action-build-deb@ubuntu-noble
-        if: matrix.distro == 'ubuntu-noble'
-        name: Build package for ubuntu-noble
-        id: build-ubuntu-noble
-        with:
-          args: --no-sign
-          ppa: ${{ steps.ppa.outputs.ppa }}
-
-      - uses: legoktm/gh-action-build-deb@ubuntu-jammy
-        if: matrix.distro == 'ubuntu-jammy'
-        name: Build package for ubuntu-jammy
-        id: build-ubuntu-jammy
-        with:
-          args: --no-sign
-          ppa: ${{ steps.ppa.outputs.ppa }}
-
-      - uses: legoktm/gh-action-build-deb@ubuntu-focal
-        if: matrix.distro == 'ubuntu-focal'
-        name: Build package for ubuntu-focal
-        id: build-ubuntu-focal
+      - uses: legoktm/gh-action-build-deb@test
+        if: startswith(matrix.distro, 'ubuntu:')
+        name: Build package for ${{ matrix.distro }}
         with:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
